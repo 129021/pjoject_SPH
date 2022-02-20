@@ -1,6 +1,6 @@
 //配置路由的地方
 
-import vue from 'vue';
+import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 // 使用插件
@@ -19,19 +19,31 @@ export default new VueRouter({
     routes:[
         {
             path:'/home',
-            component:Home
+            component:Home,
+            meta:{show:true}
         },
         {
-            path:'/search',
+            path:'/search/:keyword',
             component:Search,
+            meta:{show:true},
+            name:'search',
         },
         {
             path:'/login',
-            component:Login
+            component:Login,
+            meta:{show:false}
         },
         {
             path:'/register',
-            component:Register
+            component:Register,
+            meta:{show:false}
+        },
+
+        // 重定向，在项目跑起来的时候，当访问/的时候，立马让他定向到首页
+        {
+            path:'*',
+            redirect:'/home'
+
         }
 
     ]

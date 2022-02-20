@@ -1,8 +1,15 @@
 <template>
   <div id="app">
    <Header></Header>
-   我是根组件
-   <Footer></Footer>
+
+   <!-- 路由组件出口的地方 -->
+   <router-view></router-view>
+
+
+   <!-- Footer组件在Home和Search是显示的，在Login和Register是隐藏的 -->
+
+   <Footer v-show="$route.meta.show"></Footer>
+
   </div>
 
 </template>

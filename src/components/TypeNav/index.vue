@@ -3,13 +3,12 @@
 
   <div class="type-nav">
     <div class="container">
-
       <div @mouseleave="leaveIndex">
         <h2 class="all">全部商品分类</h2>
 
         <!-- 三级联动 -->
         <div class="sort">
-          <div class="all-sort-list2">
+          <div class="all-sort-list2" @click="goSearch">
             <div
               class="item"
               v-for="(c1, index) in categoryList"
@@ -17,26 +16,33 @@
               :class="{ cur: currentIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a href="">{{ c1.categoryName }}</a>
+                <a >{{ c1.categoryName }}</a>
+                <!-- <router-link to="/search">{{ c1.categoryName }}</router-link> -->
               </h3>
 
               <!-- 二级三级分类 -->
               <div class="item-list clearfix">
                 <div
                   class="subitem"
-                  v-for="(c2, index) in c1.categoryChild"
+                  v-for="(c2) in c1.categoryChild"
                   :key="c2.categoryId"
                 >
                   <dl class="fore">
                     <dt>
-                      <a href="">{{ c2.categoryName }}</a>
+                      <a >{{ c2.categoryName }}</a>
+                      <!-- <router-link to="/search">{{
+                        c2.categoryName
+                      }}</router-link> -->
                     </dt>
                     <dd>
                       <em
-                        v-for="(c3, index) in c2.categoryChild"
+                        v-for="(c3) in c2.categoryChild"
                         :key="c3.categoryId"
                       >
-                        <a href="">{{ c3.categoryName }}</a>
+                        <a >{{ c3.categoryName }}</a>
+                        <!-- <router-link to="/search">{{
+                          c3.categoryName
+                        }}</router-link> -->
                       </em>
                     </dd>
                   </dl>
@@ -63,13 +69,12 @@
 <script>
 import { mapState } from "vuex";
 
-
 // 这种引入方式是把loadsh全部的功能引入
 // 最好的引入方式是按需加载
 
 // import _ from 'lodash';
 
-import throttle from 'lodash/throttle';
+import throttle from "lodash/throttle";
 // console.log(_);
 export default {
   name: "TypeNav",
@@ -82,16 +87,26 @@ export default {
   methods: {
     // 鼠标进入修改响应式数据currentIndex属性
     // throttle回调函数别用箭头函数，可能出现上下文this
-    changeIndex:throttle(function(index){
+    changeIndex: throttle(function (index) {
       // alert(index)
       // alert(123)
       // index：鼠标移上某一个一级分类的元素的索引值
       this.currentIndex = index;
-    },50),
+    }, 50),
 
     // 一级分类鼠标移除的事件
     leaveIndex() {
       this.currentIndex = -1;
+    },
+
+    // 点击三级联动标签进行路由跳转的方法
+
+    // 最好的解决方案：编程式导航+事件委派
+    // 利用事件委派存在一些问题：
+    // 1. 不能确定点击的一定是a标签
+    // 2.如何获取参数（1,2,3级标签的名字ID）
+    goSearch() {
+      this.$router.push("/search");
     },
   },
 

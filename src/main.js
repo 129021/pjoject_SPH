@@ -1,3 +1,6 @@
+// 这是入口文件
+
+
 import Vue from 'vue'
 import App from './App.vue'
 
@@ -18,6 +21,11 @@ import store from '@/store'
 // import {reqCategoryList} from '@/api'
 
 // reqCategoryList();
+
+
+
+// 引入mockServer.js来mock数据
+import '@/mock/mockServer';
 
 Vue.config.productionTip = false
 

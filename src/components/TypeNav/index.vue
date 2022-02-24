@@ -16,7 +16,11 @@
               :class="{ cur: currentIndex == index }"
             >
               <h3 @mouseenter="changeIndex(index)">
-                <a >{{ c1.categoryName }}</a>
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
                 <!-- <router-link to="/search">{{ c1.categoryName }}</router-link> -->
               </h3>
 
@@ -24,22 +28,27 @@
               <div class="item-list clearfix">
                 <div
                   class="subitem"
-                  v-for="(c2) in c1.categoryChild"
+                  v-for="c2 in c1.categoryChild"
                   :key="c2.categoryId"
                 >
                   <dl class="fore">
                     <dt>
-                      <a >{{ c2.categoryName }}</a>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
                       <!-- <router-link to="/search">{{
                         c2.categoryName
                       }}</router-link> -->
                     </dt>
                     <dd>
-                      <em
-                        v-for="(c3) in c2.categoryChild"
-                        :key="c3.categoryId"
-                      >
-                        <a >{{ c3.categoryName }}</a>
+                      <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
                         <!-- <router-link to="/search">{{
                           c3.categoryName
                         }}</router-link> -->
@@ -105,8 +114,39 @@ export default {
     // 利用事件委派存在一些问题：
     // 1. 不能确定点击的一定是a标签
     // 2.如何获取参数（1,2,3级标签的名字ID）
-    goSearch() {
-      this.$router.push("/search");
+    // 3. 即使你能确定点击的是a标签，如何区分是一级、二级、三级标签
+
+    // 解决方案：
+    // 1. 把子节点当中a标签,加上自定义属性data-categoryName,而其余的子节点是没有的
+
+    goSearch(event) {
+      // this.$router.push("/search");
+      let element = event.target;
+      // 获取到当前触发这个事件的节点（h3,a,dt,dl)，需要带有data-categoryname这样节点（一定是a标签）
+      // 节点有一个dataset属性，可以获取节点的自定义属性与属性值
+
+      let { categoryname, category1id, category2id, category3id } =
+        element.dataset;
+      // 如果标签身上拥有categoryname一定是a标签
+      if (categoryname) {
+        // 整理路由跳转的参数
+        let location = { name: "search" };
+        let query = { categoryName: categoryname };
+
+        // 如何区分是一级、二级还是三级？
+        if (category1id) {
+          query.category1Id = category1id;
+        } else if (category2id) {
+          query.category2Id = category2id;
+        } else {
+          query.category3Id = category3id;
+        }
+
+        // 整理完参数
+        location.query=query;
+        // 路由跳转
+        this.$router.push(location)
+      }
     },
   },
 

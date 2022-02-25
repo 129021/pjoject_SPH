@@ -27,6 +27,12 @@ import store from '@/store'
 // 引入mockServer.js来mock数据
 import '@/mock/mockServer';
 
+
+
+
+// 引入Swiper样式
+import "swiper/css/swiper.css"
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -1,7 +1,8 @@
 // home 模块的小仓库
 import {
     reqCategoryList,
-    reqBannerList
+    reqBannerList,
+    reqFloorList,
 } from '@/api';
 
 
@@ -10,6 +11,8 @@ const state = {
     categoryList: [],
 
     bannerList: [],
+
+    floorList:[],
 };
 const mutations = {
     CATEGORYLIST(state, categoryList) {
@@ -19,8 +22,13 @@ const mutations = {
     },
 
 
-    BANNERLIST(state,bannerList){
-        state.bannerList=bannerList;
+    BANNERLIST(state, bannerList) {
+        state.bannerList = bannerList;
+    },
+
+    
+    FLOORLIST(state,floorList){
+        state.floorList=floorList;
     }
 
 
@@ -49,7 +57,27 @@ const actions = {
         if (result.code == 200) {
             commit('BANNERLIST', result.data)
         }
+    },
+
+
+
+
+
+    // 获取floor数据
+    async getFloorList({
+        commit
+    }) {
+        let result = await reqFloorList();
+        if (result.code == 200) {
+            commit('FLOORLIST', result.data)
+        }
+
     }
+
+
+
+
+
 };
 const getters = {};
 

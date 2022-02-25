@@ -118,37 +118,73 @@ export default {
 
     // 在new Swiper实例之前，页面中结构必须得有，（现在坝new Swiper 实例放在mounted这里发现不行，是因为结构还不完整：
     // 因为dispatch当中涉及到异步语句，导致v-for遍历的时候结构还不完整，因此不行
-    setTimeout(() => {
-      var mySwiper = new Swiper(".swiper-container", {
-        // direction: 'vertical', // 垂直切换选项
-        loop: true, // 循环模式选项
+    // setTimeout(() => {
+    //   var mySwiper = new Swiper(".swiper-container", {
+    //     // direction: 'vertical', // 垂直切换选项
+    //     loop: true, // 循环模式选项
 
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-          clickable:true,
-        },
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //       clickable:true,
+    //     },
 
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
 
-        // 如果需要滚动条
-        // scrollbar: {
-        //     el: '.swiper-scrollbar',
-        // },
-      });
-    }, 2000);
+    //     // 如果需要滚动条
+    //     // scrollbar: {
+    //     //     el:  '.swiper-scrollbar',
+    //     // },
+    //   });
+    // }, 2000);
   },
   computed: {
     ...mapState({
       bannerList: (state) => state.home.bannerList,
     }),
   },
-  created() {
-    
+  created() {},
+
+  watch: {
+    // 监听bannerList数据的变化:bannerList由一个空数组变为数组里面包含四个元素
+
+    // 当前这个函数执行：只能保证bannerList数据已经有了，但是你没办法保证v-for已经执行结束了
+
+    // 只有v-for执行完毕之后才会有完整的结构，但是现在在watch当中是没有办法保证的
+    bannerList: {
+      immediate:true,
+      handler(newValue, oldValue) {
+        //  如果执行 handler方法，代表组件实例身上的这个属性的属性值已经有了
+
+
+        this.$nextTick(() => {
+          var mySwiper = new Swiper(".swiper-container", {
+            // direction: 'vertical', // 垂直切换选项
+            loop: true, // 循环模式选项
+
+            // 如果需要分页器
+            pagination: {
+              el: ".swiper-pagination",
+            },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+
+            // 如果需要滚动条
+            // scrollbar: {
+            //     el: '.swiper-scrollbar',
+            // },
+          });
+        });
+      },
+    },
   },
 };
 </script>

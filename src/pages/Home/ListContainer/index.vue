@@ -4,7 +4,7 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <!-- <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
             <div
               class="swiper-slide"
@@ -13,23 +13,20 @@
             >
               <img :src="carousel.imgUrl" />
             </div>
-            <!-- <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
-            </div> -->
+ 
           </div>
-          <!-- 如果需要分页器 -->
+        
           <div class="swiper-pagination"></div>
 
-          <!-- 如果需要导航按钮 -->
+    
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
-        </div>
+        </div> -->
+
+
+
+        <!-- 使用全局组件的轮播图： -->
+        <Carousel :list="bannerList"/>
       </div>
       <div class="right">
         <div class="news">
@@ -107,7 +104,7 @@
 <script>
 import { mapState } from "vuex";
 
-import Swiper from "swiper";
+// import Swiper from "swiper";
 
 export default {
   name: "ListContainer",
@@ -149,43 +146,42 @@ export default {
   },
   created() {},
 
-  watch: {
-    // 监听bannerList数据的变化:bannerList由一个空数组变为数组里面包含四个元素
+  // watch: {
+  //   // 监听bannerList数据的变化:bannerList由一个空数组变为数组里面包含四个元素
 
-    // 当前这个函数执行：只能保证bannerList数据已经有了，但是你没办法保证v-for已经执行结束了
+  //   // 当前这个函数执行：只能保证bannerList数据已经有了，但是你没办法保证v-for已经执行结束了
 
-    // 只有v-for执行完毕之后才会有完整的结构，但是现在在watch当中是没有办法保证的
-    bannerList: {
-      immediate:true,
-      handler(newValue, oldValue) {
-        //  如果执行 handler方法，代表组件实例身上的这个属性的属性值已经有了
+  //   // 只有v-for执行完毕之后才会有完整的结构，但是现在在watch当中是没有办法保证的
+  //   bannerList: {
+  //     immediate:true,
+  //     handler(newValue, oldValue) {
+  //       //  如果执行 handler方法，代表组件实例身上的这个属性的属性值已经有了
 
+  //       this.$nextTick(() => {
+  //         var mySwiper = new Swiper(".swiper-container", {
+  //           // direction: 'vertical', // 垂直切换选项
+  //           loop: true, // 循环模式选项
 
-        this.$nextTick(() => {
-          var mySwiper = new Swiper(".swiper-container", {
-            // direction: 'vertical', // 垂直切换选项
-            loop: true, // 循环模式选项
+  //           // 如果需要分页器
+  //           pagination: {
+  //             el: ".swiper-pagination",
+  //           },
 
-            // 如果需要分页器
-            pagination: {
-              el: ".swiper-pagination",
-            },
+  //           // 如果需要前进后退按钮
+  //           navigation: {
+  //             nextEl: ".swiper-button-next",
+  //             prevEl: ".swiper-button-prev",
+  //           },
 
-            // 如果需要前进后退按钮
-            navigation: {
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            },
-
-            // 如果需要滚动条
-            // scrollbar: {
-            //     el: '.swiper-scrollbar',
-            // },
-          });
-        });
-      },
-    },
-  },
+  //           // 如果需要滚动条
+  //           // scrollbar: {
+  //           //     el: '.swiper-scrollbar',
+  //           // },
+  //         });
+  //       });
+  //     },
+  //   },
+  // },
 };
 </script>
 

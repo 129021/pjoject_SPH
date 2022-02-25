@@ -29,7 +29,7 @@
             </div>
             <div class="floorBanner">
               <!-- 这里是轮播图 -->
-
+              <Carousel :list="list.carouselList" />
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -60,8 +60,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: "floor",
   props: ["list"],
@@ -87,7 +85,6 @@ export default {
     //   // },
     // });
   },
-
 };
 </script>
 

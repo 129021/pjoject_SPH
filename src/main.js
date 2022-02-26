@@ -44,8 +44,8 @@ import "swiper/css/swiper.css"
 
 // 测试：
 import {reqGetSearchInfo} from '@/api'
-console.log(reqGetSearchInfo({}));
-console.log();
+// console.log(reqGetSearchInfo({}));
+// console.log();
 
 Vue.config.productionTip = false
 

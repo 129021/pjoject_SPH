@@ -13,10 +13,13 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- <li class="with-x">手机</li> -->
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName
+              }}<i @click="removeCategoryName">×</i>
+            </li>
+            <!-- <li class="with-x">华为<i>×</i></li>
+            <li class="with-x">OPPO<i>×</i></li> -->
           </ul>
         </div>
 
@@ -523,19 +526,28 @@ export default {
       // 先测试接口返回的数据格式
       this.$store.dispatch("getSearchList", this.searchParams);
     },
+
+    // 面包屑中的标签上一点击X就删除分类的名字
+    removeCategoryName() {
+
+// 在带给服务器的参数都是可有可无的前提下：如果属性值为空的字符串，还是会把相应的字段带给服务器，但是你把相应的字段变为Undefined，这个字段就不会带给服务器了
+
+      this.searchParams.categoryName = "";
+      this.searchParams.category1Id = "";
+      this.searchParams.category2Id = "";
+      this.searchParams.category3Id = "";
+
+      // 把带给服务器的categroyName参数置空了，这里还需要向服务器发送请求
+      this.getData();
+    },
   },
 
-  beforeCreate() {
-    
-  },
-  created() {
-    
-  },
+  beforeCreate() {},
+  created() {},
 
   // 当组件挂载完毕之前执行一次(先于mounted)
   beforeMount() {
     // console.log(this.$route.query);
-
 
     // 修改searchParams复杂的写法
     // this.searchParams.category1Id=this.$route.query.category1Id;
@@ -544,16 +556,34 @@ export default {
     // this.searchParams.categoryName=this.$route.query.categoryName;
     // this.searchParams.keyword=this.$route.params.keyword;
 
-
-
     // 简单的写法
     // ES6新增的语法,合并对象
-    Object.assign(this.searchParams,this.$route.query,this.$route.params)
-
+    Object.assign(this.searchParams, this.$route.query, this.$route.params);
   },
   mounted() {
     // 在发送请求之前给服务器searchParams参数
     this.getData();
+  },
+
+  // 数据监听：监听组件实例身上的属性的属性值的变化
+  watch: {
+    // 监听属性
+    $route(newValue, oldValue) {
+      // console.log('路由信息发生变化');
+      // console.log(this.searchParams);
+      // 打印发现，即使在搜索框中输入了关键字并进行搜索，打印出的keyword依旧为空，这是因为searchParams只在beforeMounte里整理过一次，到这里并没有整理第二次，所以searchParams中keyword没有改变，如果想要更新searchParams，需要重新整理（Object.assign)
+
+      Object.assign(this.searchParams, this.$route.query, this.$route.params);
+
+      // 这里整理searchParams完毕，需要再次发起ajax请求
+      this.getData();
+      // console.log(this.searchParams);
+
+      // 每一次请求完毕之后，应该把相应的1,2,3级id清空，让它接收下一期ajax的1级或者2级或者3级ID
+      this.searchParams.category1Id = "";
+      this.searchParams.category2Id = "";
+      this.searchParams.category3Id = "";
+    },
   },
   // computed: {
   //   ...mapState({

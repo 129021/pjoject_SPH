@@ -10,9 +10,9 @@ import TypeNav from '@/components/TypeNav'
 
 import Carousel from '@/components/Carousel'
 // 注册全局组件
-Vue.component(TypeNav.name,TypeNav)
+Vue.component(TypeNav.name, TypeNav)
 
-Vue.component(Carousel.name,Carousel)
+Vue.component(Carousel.name, Carousel)
 
 // 引入路由
 import router from '@/router'
@@ -43,7 +43,9 @@ import "swiper/css/swiper.css"
 
 
 // 测试：
-import {reqGetSearchInfo} from '@/api'
+import {
+  reqGetSearchInfo
+} from '@/api'
 // console.log(reqGetSearchInfo({}));
 // console.log();
 
@@ -51,6 +53,11 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
+  beforeCreate() {
+    // 全局事件总线$bus配置
+Vue.prototype.$bus=this;
+
+  },
 
   // 注册路由(底下的写法是kV一致省略V，router是小写)
   router,

@@ -13,10 +13,31 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
+            <!-- 分类的面包屑 -->
             <!-- <li class="with-x">手机</li> -->
             <li class="with-x" v-if="searchParams.categoryName">
               {{ searchParams.categoryName
               }}<i @click="removeCategoryName">×</i>
+            </li>
+
+            <!-- 关键字的面包屑 -->
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
+            </li>
+
+            <!-- 品牌的面包屑 -->
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="removeTrademark">×</i>
+            </li>
+
+            <!-- 商品售卖的属性值的面包屑 -->
+            <li
+              class="with-x"
+              v-for="(attrValue, index) in searchParams.props"
+              :key="index"
+            >
+              {{ attrValue.split(":")[1] }}<i @click="removeAttr(index)">×</i>
             </li>
             <!-- <li class="with-x">华为<i>×</i></li>
             <li class="with-x">OPPO<i>×</i></li> -->
@@ -25,30 +46,32 @@
 
         <!--selector-->
         <!-- 这是属于search组件的子组件 -->
-        <SearchSelector />
+        <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo" />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
+              <!-- 排序的结构 -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }">
+                  <a
+                    >综合<span
+                      v-show="isOne"
+                      class="iconfont"
+                      :class="{ 'icon-up': isAsc, 'icon-down': isDesc }"
+                    ></span
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+
+                <li :class="{ active: isTwo }">
+                  <a
+                    >价格<span
+                      v-show="isTwo"
+                      class="iconfont"
+                      :class="{'icon-up': isAsc, 'icon-down': isDesc }"
+                    ></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -493,8 +516,8 @@ export default {
         // 搜索框中的关键字
         keyword: "",
 
-        // 排序
-        order: "",
+        // 排序:初始的排序不应该为空，应该为综合降序
+        order: "1:desc",
 
         // 分页器，默认为第一页
         pageNo: 1,
@@ -517,6 +540,19 @@ export default {
   computed: {
     // mapGetters里面的写法：传递的数组,因为getters计算是没有划分模块的
     ...mapGetters(["goodsList"]),
+
+    isOne() {
+      return this.searchParams.order.indexOf("1") != -1;
+    },
+    isTwo() {
+      return this.searchParams.order.indexOf("2") != -1;
+    },
+    isAsc() {
+      return this.searchParams.order.indexOf("asc") != -1;
+    },
+    isDesc() {
+      return this.searchParams.order.indexOf("desc") != -1;
+    },
   },
 
   methods: {
@@ -529,8 +565,7 @@ export default {
 
     // 面包屑中的标签上一点击X就删除分类的名字
     removeCategoryName() {
-
-// 在带给服务器的参数都是可有可无的前提下：如果属性值为空的字符串，还是会把相应的字段带给服务器，但是你把相应的字段变为Undefined，这个字段就不会带给服务器了
+      // 在带给服务器的参数都是可有可无的前提下：如果属性值为空的字符串，还是会把相应的字段带给服务器，但是你把相应的字段变为Undefined，这个字段就不会带给服务器了
 
       this.searchParams.categoryName = "";
       this.searchParams.category1Id = "";
@@ -538,6 +573,80 @@ export default {
       this.searchParams.category3Id = "";
 
       // 把带给服务器的categroyName参数置空了，这里还需要向服务器发送请求
+      this.getData();
+
+      // 地址栏也需要改：进行路由跳转(自己跳自己，这是一个骚操作)
+      // this.$router.push({name:'search'});
+
+      // 本意是删除query参数，如果路径中带着params参数，就应该带着，不应该删除
+      if (this.$route.params) {
+        this.$router.push({ name: "search", params: this.$route.params });
+      }
+    },
+
+    // 面包屑中的标签上一点击X就可以删除关键字
+    removeKeyword() {
+      // 给服务器带的参数searchParams的keyword置空
+      this.searchParams.keyword = undefined;
+
+      // 再次发请求
+      this.getData();
+
+      // 通知兄弟组件header清除关键字（搜索框中的关键字）
+      this.$bus.$emit("clear");
+
+      // 进行路由的跳转
+      if (this.$route.query) {
+        this.$router.push({ name: "search", query: this.$route.query });
+      }
+    },
+
+    // 子传父的自定义事件的回调
+    trademarkInfo(trademark) {
+      // console.log('我是父组件',trademark);
+
+      // 1. 整理参数 整理成“id:品牌名称”的样式
+      this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+
+      // 2. 再次发起请求
+      this.getData();
+    },
+
+    // 面包屑中的标签上一点击X就删除品牌的名字
+    removeTrademark() {
+      // 将品牌信息置空
+      this.searchParams.trademark = undefined;
+
+      // 再次发起请求
+      this.getData();
+    },
+
+    // 收集平台属性到回调函数(自定义事件)
+    attrInfo(attr, attrValue) {
+      // console.log(attr, attrValue);
+
+      // 先把要带给服务器的参数的格式整理好
+      let props = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+
+      // 这里不经判断直接Push会导致一个问题：如果一直点击同一个attrValue，会导致显示多个相同的面包屑
+      // this.searchParams.props.push(props);
+
+      // 判断元素是否在数组里面，如果没有，再进行push
+
+      if (this.searchParams.props.indexOf(props) == -1) {
+        this.searchParams.props.push(props);
+      }
+
+      // 再次发起请求
+      this.getData();
+    },
+
+    // 一点击X删除售卖的属性的面包屑
+    removeAttr(index) {
+      // 整理参数
+      this.searchParams.props.splice(index, 1);
+
+      // 发起请求
       this.getData();
     },
   },

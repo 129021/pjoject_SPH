@@ -74,18 +74,25 @@ export default {
       // 第三种传参方式：对象写法
       // this.$router.push({name:'search',params:{keyword:this.keyword},query:{k:this.keyword.toUpperCase()}})
 
+      if (this.$route.query) {
+        let location = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+        };
 
-      if(this.$route.query){
-        let location={name:'search',params:{keyword:this.keyword || undefined}};
+        location.query = this.$route.query;
 
-        location.query=this.$route.query;
-
-        this.$router.push(location)
+        this.$router.push(location);
       }
-
     },
   },
-}; 
+  mounted() {
+    // 通过全局事件总线清除关键字
+    this.$bus.$on("clear", () => {
+      this.keyword = "";
+    });
+  },
+};
 </script>
 
 <style scoped lang="less">

@@ -4,7 +4,7 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="(trademark,index) in trademarkList" :key="trademark.tmId">{{trademark.tmName}}</li>
+          <li v-for="(trademark,index) in trademarkList" :key="trademark.tmId"  @click="trademarkHandler(trademark)">{{trademark.tmName}}</li>
           <!-- <li>TCL</li>
           <li>长虹（CHANGHONG）</li>
           <li>飞利浦（PHILIPS）</li>
@@ -29,11 +29,18 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
+
+
+    <!-- 平台售卖属性的地方 -->
     <div class="type-wrap" v-for="(attr,index) in attrsList" :key="attr.attrId">
+
+      <!-- 平台售卖商品的属性：比如说颜色 -->
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue,index) in attr.attrValueList" :key="index">
+
+          <!-- 这里就是对应的属性值：比如说红色，黑色绿色等等 -->
+          <li v-for="(attrValue,index) in attr.attrValueList" :key="attrValue" @click="attrInfo(attr,attrValue)">
             <a>{{attrValue}}</a>
           </li>
           <!-- <li>
@@ -165,7 +172,35 @@ import {mapGetters} from 'vuex';
     name: 'SearchSelector',
     computed:{
       ...mapGetters(['trademarkList','attrsList'])
-    }
+    },
+    methods: {
+      // 品牌的事件处理函数
+      trademarkHandler(trademark){
+        // alert('123')
+
+        // 点击了品牌之后，还是需要整理参数，向服务器发请求获取相应的数据进行展示
+
+        // 要在子组件还是父组件中发请求？
+        // 父组件，因为父组件中searchParams参数是带给服务器的参数，子组件需要把你点击的品牌信息，需要给父组件传过去
+
+        // 子给父传参:自定义事件
+        // console.log(trademark);
+        this.$emit('trademarkInfo',trademark);
+
+      },
+
+
+      // 平台售卖属性值的点击事件
+      attrInfo(attr,attrValue){
+
+        // ['属性ID':'属性值':'属性名']
+        // alert(123)
+
+        this.$emit('attrInfo',attr,attrValue);
+
+
+      }
+    },
   }
 </script>
 

@@ -54,7 +54,7 @@
             <div class="navbar-inner filter">
               <!-- 排序的结构 -->
               <ul class="sui-nav">
-                <li :class="{ active: isOne }">
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
                   <a
                     >综合<span
                       v-show="isOne"
@@ -64,12 +64,12 @@
                   ></a>
                 </li>
 
-                <li :class="{ active: isTwo }">
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
                   <a
                     >价格<span
                       v-show="isTwo"
                       class="iconfont"
-                      :class="{'icon-up': isAsc, 'icon-down': isDesc }"
+                      :class="{ 'icon-up': isAsc, 'icon-down': isDesc }"
                     ></span
                   ></a>
                 </li>
@@ -458,7 +458,7 @@
           </div>
 
           <!-- 分页 -->
-          <div class="fr page">
+          <!-- <div class="fr page">
             <div class="sui-pagination clearfix">
               <ul>
                 <li class="prev disabled">
@@ -486,7 +486,9 @@
               </ul>
               <div><span>共10页&nbsp;</span></div>
             </div>
-          </div>
+          </div> -->
+
+          <Pagination />
         </div>
       </div>
     </div>
@@ -647,6 +649,40 @@ export default {
       this.searchParams.props.splice(index, 1);
 
       // 发起请求
+      this.getData();
+    },
+
+    // 排序的操作
+    changeOrder(flag) {
+      // flag形参：它是一个标记，代表用户点击的是综合（1）还是价格（2）(这是用户点击时传递过来的参数)
+      // console.log(flag);
+      // alert(123)
+
+      let originOrder = this.searchParams.order;
+      // console.log(originOrder);
+      // let originFlag=this.searchParams.order.split(':')[0]
+
+      // 这里获取到的是最起始的状态
+      let originFlag = originOrder.split(":")[0];
+      // console.log(originFlag);
+      let originSort = originOrder.split(":")[1];
+      // console.log(originSort);
+
+      // 准备一个新的order属性值
+      let newOrder = "";
+
+      // 这个语句可以确定点击的一定是综合
+      if (flag == originFlag) {
+        newOrder = `${originFlag}:${originSort == "desc" ? "asc" : "desc"}`;
+      } else {
+        // 点击的是价格
+        newOrder = `${flag}:${"desc"}`;
+      }
+
+      // 将新的order赋予searchParams
+      this.searchParams.order = newOrder;
+
+      // 发请求
       this.getData();
     },
   },

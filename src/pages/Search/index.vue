@@ -488,7 +488,8 @@
             </div>
           </div> -->
 
-          <Pagination />
+<!-- 测试分页器 -->
+          <Pagination :pageNo="1" :pageSize="3" :total="91" :continues="5"/>
         </div>
       </div>
     </div>

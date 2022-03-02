@@ -87,9 +87,9 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="good.defaultImg"
-                    /></a>
+                    <!-- <a href="item.html" target="_blank">、 -->
+                    <router-link :to="`/detail/${good.id}`"> <img :src="good.defaultImg" /></router-link>
+                    <!-- </a> -->
                   </div>
                   <div class="price">
                     <strong>
@@ -505,9 +505,7 @@
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 
-import { mapGetters ,mapState} from "vuex";
-
-
+import { mapGetters, mapState } from "vuex";
 
 // import { mapState } from "vuex";
 export default {
@@ -531,10 +529,10 @@ export default {
         order: "1:desc",
 
         // 分页器，默认为第一页
-        pageNo:1,
+        pageNo: 1,
 
         // 每一页有多少条数据
-        pageSize:10,
+        pageSize: 10,
 
         // 平台售卖属性操作带的参数
         props: [],
@@ -565,13 +563,11 @@ export default {
       return this.searchParams.order.indexOf("desc") != -1;
     },
 
-
-
     // 获取search模块展示产品一共多少数据
 
     ...mapState({
-      total:state=>state.search.searchList.total
-    })
+      total: (state) => state.search.searchList.total,
+    }),
   },
 
   methods: {
@@ -703,17 +699,16 @@ export default {
       this.getData();
     },
 
-
     // 这是自定义事件getPageNo的回调函数：获取当前页是第几页
-    getPageNo(pageNo){
+    getPageNo(pageNo) {
       // console.log(pageNo);
 
       // 整理带给服务器的参数
-      this.searchParams.pageNo=pageNo;
+      this.searchParams.pageNo = pageNo;
 
       // 再次发请求
       this.getData();
-    }
+    },
   },
 
   beforeCreate() {},

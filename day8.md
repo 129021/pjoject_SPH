@@ -6,3 +6,21 @@
 - continues:连续的页码数
 - totalPage：分页器一共多少页
 
+## 1. 数据解释：以售卖属性为例
+
+[
+    {
+        attr:'颜色',
+        attrValue:['red','blue','yellow']
+    },
+    {
+        attr:'版本',
+        attrValue:['16','32','64']
+    }
+]
+
+
+收集表单数据:
+- v-model
+- ref
+

@@ -455,11 +455,14 @@ export default {
         // 在路由跳转的时候还需要将产品的信息带给下一级的路由组件
         // 下面的这种手段进行路由跳转和传递参数是可以的
         // this.$router.push({ name: "addcartsuccess" ,query:{skuInfo:this.skuInfo,skuNum:this.skuNum}});
+<<<<<<< HEAD
 
         // 一些简单的数据，比如说skuNum，可以通过query的形式给路由组件传递过去
         // 产品信息（skuInfo)的数据比较复杂,可以通过会话存储（不持久化，会话结束数据就消失）
         // 本地存储和会话存储一般存储的都是字符串，不能存储对象，所以这里需要先把对象转化为字符串
         sessionStorage.setItem('SKUINFO',JSON.stringify(this.skuInfo))
+=======
+>>>>>>> c2fd05c332d14c30c2a54d2693ca290a7d5b8cc3
         this.$router.push({ name: "addcartsuccess" ,query:{skuNum:this.skuNum}});
       } catch (error) {
         alert(error.message);

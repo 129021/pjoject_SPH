@@ -2,8 +2,15 @@ import {
     reqAddOrUpdateShopCart,
     reqGoodsInfo,
 } from "@/api";
+
+// 封装一个游客身份的模块uuid，用来生成一个随机的字符串（但是生成一次就不能再变了）
+import {getUUID} from '@/utils/uuid_token'
 const state = {
     goodInfo: {},
+
+
+    // 游客的临时身份
+    uuid_token:getUUID(),
 };
 const mutations = {
     GETGOODINFO(state, goodInfo) {

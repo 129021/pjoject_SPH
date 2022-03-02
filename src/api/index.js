@@ -68,3 +68,16 @@ export const reqAddOrUpdateShopCart=(skuId,skuNum)=>requests({
     url:`/cart/addToCart/${skuId}/${skuNum}`,
     method:'post',
 })
+
+
+
+
+// 获取购物车列表数据接口
+// URL:/api/cart/cartList
+// 请求方式：get
+// 参数：无
+
+export const reqCartList=()=>requests({
+    url:'/cart/cartList',
+    method:'get',
+})

@@ -5,10 +5,8 @@ import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Detail from '@/pages/Detail'
 import AddCartSuccess from '@/pages/AddCartSuccess'
-<<<<<<< HEAD
+
 import ShopCart from '@/pages/ShopCart'
-=======
->>>>>>> c2fd05c332d14c30c2a54d2693ca290a7d5b8cc3
 
 // 路由的具体配置信息
 export default [{
@@ -49,17 +47,17 @@ export default [{
     },
     {
         path: '/addcartsuccess',
-<<<<<<< HEAD
+
         name: 'addcartsuccess',
-=======
+
         name:'addcartsuccess',
->>>>>>> c2fd05c332d14c30c2a54d2693ca290a7d5b8cc3
+
         component: AddCartSuccess,
         meta: {
             show: true
         }
     },
-<<<<<<< HEAD
+
     {
         path: '/shopcart',
         // name: 'ShopCart',
@@ -68,8 +66,6 @@ export default [{
             show: true
         }
     },
-=======
->>>>>>> c2fd05c332d14c30c2a54d2693ca290a7d5b8cc3
 
 
     // 重定向，在项目跑起来的时候，当访问/的时候，立马让他定向到首页

@@ -1,5 +1,5 @@
 import {
-    reqCartList
+    reqCartList,reqDeleteCartById
 } from '@/api'
 
 const state = {
@@ -22,6 +22,18 @@ const actions = {
             commit('GETCARTLIST',result.data);
         }
 
+    },
+
+
+    // 删除购物车某一个产品
+   async reqDeleteCartListBySkuId({commit},skuId){
+      let result=  await reqDeleteCartById(skuId);
+
+      if (result.code==200){
+          return 'ok'
+      }else{
+          return Promise.reject(new Error('fail'))
+      }
     }
 };
 const getters = {

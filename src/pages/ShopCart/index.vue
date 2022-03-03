@@ -59,7 +59,9 @@
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}.00</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="#none" class="sindelet" @click="deleteCartById(cart)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -163,6 +165,9 @@
 <script>
 import { mapGetters } from "vuex";
 
+// lodash节流
+import throttle from "lodash/throttle";
+
 export default {
   name: "ShopCart",
   computed: {
@@ -200,7 +205,52 @@ export default {
     },
 
     // 修改某一个产品的个数
-    async handler(type, disNum, cart) {
+    // async handler(type, disNum, cart) {
+    //   // type是为了区分这三个元素
+    //   // 目前的disNum形参：+变化量（1）   -变化量(-1)   input最终的个数（并不是变化量）
+    //   // cart:判断是哪一个产品，chat身上有skuId
+    //   // console.log('派发action，通知服务器修改产品个数',type,disNum,cart);
+
+    //   switch (type) {
+    //     // 加号
+    //     case "add":
+    //       // 带给服务器变化的量
+    //       disNum = 1;
+    //       break;
+    //     case "minus":
+    //       // 判断产品的个数大于1，才可以传递给服务器-1
+    //       // if (cart.skuNum > 1) {
+    //       //   disNum = -1;
+    //       // } else {
+    //       //   // 产品的个数小于等于1,传递给服务器的disNum=0
+    //       //   disNum = 0;
+    //       // }
+    //       disNum = cart.skuNum > 1 ? -1 : 0;
+    //       break;
+    //     case "change":
+    //       // 如果用户输入进来的量是非法的，disNum=0（也就是不变）
+    //       if (isNaN(disNum) || disNum < 1) {
+    //         disNum = 0;
+    //       } else {
+    //         disNum = parseInt(disNum) - cart.skuNum;
+    //       }
+    //   }
+
+    //   // 派发action
+    //   try {
+    //     // 代表的是修改成功
+    //     await this.$store.dispatch("addOrUpdateShopCart", {
+    //       skuId: cart.skuId,
+    //       skuNum: disNum,
+    //     });
+    //     this.getData();
+    //     //  再一次获取服务器最新的数据进行展示
+    //   } catch (error) {}
+    // },
+
+
+// 修改某一个产品的个数（加入lodash节流）
+    handler: throttle(async function (type, disNum, cart) {
       // type是为了区分这三个元素
       // 目前的disNum形参：+变化量（1）   -变化量(-1)   input最终的个数（并不是变化量）
       // cart:判断是哪一个产品，chat身上有skuId
@@ -241,6 +291,17 @@ export default {
         this.getData();
         //  再一次获取服务器最新的数据进行展示
       } catch (error) {}
+    }, 200),
+
+    // 删除某一个产品的操作
+    async deleteCartById(cart) {
+      try {
+        // 如果删除成功再次发请求获取新的数据进行展示
+        await this.$store.dispatch("reqDeleteCartListBySkuId", cart.skuId);
+        this.getData();
+      } catch (error) {
+        alert(error.message);
+      }
     },
   },
 };

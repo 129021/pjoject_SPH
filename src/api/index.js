@@ -102,8 +102,50 @@ export const reqDeleteCartById = (skuId) => requests({
 // 修改商品选中的状态
 // URL:/api/cart/checkCart/{skuId}/{isChecked}
 
-export const reqUpdateCheckedById=(skuId,isChecked)=>requests({
-    url:`/cart/checkCart/${skuId}/${isChecked}`,
-    method:'get',
+export const reqUpdateCheckedById = (skuId, isChecked) => requests({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: 'get',
 })
 
+
+
+// 获取验证码
+// URL:/api/user/passport/sendCode/{phone}
+// 请求方式：get
+
+export const reqGetCode = (phone) => requests({
+    url: `/user/passport/sendCode/${phone}`,
+    method: 'get',
+})
+
+
+
+// 用户注册
+// URL:/api/user/passport/register
+// 请求方式：post
+// 参数：全为必选
+// phone
+// password
+// code
+
+export const reqUserRegister = (data) => requests({
+    url: '/user/passport/register',
+    data,
+    method: 'post',
+})
+
+
+
+
+// 用户登录
+// URL:/api/user/passport/login
+// 请求方式：post
+// 参数：全选
+// phone
+// password
+
+export const reqUserLogin=(data)=>requests({
+    url:'/user/passport/login',
+    data,
+    method:'post',
+})

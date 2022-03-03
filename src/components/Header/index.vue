@@ -6,11 +6,15 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userName">
             <span>请</span>
             <!-- 声明式导航：务必要有to属性 -->
             <router-link to="/login">登录</router-link>
             <router-link class="register" to="/register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <a>{{ userName }}</a>
+            <a class="register" @click="logout">退出</a>
           </p>
         </div>
         <div class="typeList">
@@ -61,6 +65,12 @@ export default {
       keyword: "",
     };
   },
+  computed: {
+    // 用户名信息
+    userName() {
+      return this.$store.state.user.userInfo.name;
+    },
+  },
   methods: {
     //搜索按钮的回调函数：需要向search路由进行跳转
     goSearch() {
@@ -83,6 +93,22 @@ export default {
         location.query = this.$route.query;
 
         this.$router.push(location);
+      }
+    },
+
+    // 退出登录
+    async logout() {
+      // alert(123)
+
+      // 1. 需要发请求，通知服务器退出登录（清除一些数据）
+      // 2. 清除项目当中的数据（userInfo,token等）
+      try {
+        await this.$store.dispatch("userLogout");
+
+        // 退出登录成功后要回到首页
+        this.$router.push('/home')
+      } catch (error) {
+        alert(error.message);
       }
     },
   },

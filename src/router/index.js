@@ -50,7 +50,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 
 // 配置路由
 
-export default new VueRouter({
+let router= new VueRouter({
 routes,
 scrollBehavior(to, from, savedPosition) {
     // 始终滚动到顶部
@@ -105,4 +105,20 @@ scrollBehavior(to, from, savedPosition) {
 //     }
 
 // ]
+});
+
+
+// 全局守卫：前置守卫（在路由跳转之前进行判断）
+router.beforeEach((to,from,next)=>{
+    // to:可以获取到你要跳转到哪个路由的信息
+    // from：可以获取到你从哪个路由而来的信息
+    // next：放行的函数,写法有几种：
+    // next(); 代表直接放行
+
+    
+
 })
+
+
+
+export default router;

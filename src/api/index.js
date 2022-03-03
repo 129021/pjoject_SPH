@@ -149,3 +149,28 @@ export const reqUserLogin=(data)=>requests({
     data,
     method:'post',
 })
+
+
+
+// 获取用户信息（需要带着用户的token向服务器要用户信息）
+// URL:/api/user/passport/auth/getUserInfo
+// 请求方式：get
+export const reqUserInfo=()=>requests({
+    url:'/user/passport/auth/getUserInfo',
+    method:'get',
+})
+
+
+
+
+
+// 退出登录
+// URL:/api/user/passport/logout
+// 请求方式：get
+
+export const reqLogout=()=>requests({
+    url:'/user/passport/logout',
+    method:'get',
+
+    
+})

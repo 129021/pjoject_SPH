@@ -21,6 +21,7 @@
               type="checkbox"
               name="chk_list"
               :checked="cart.isChecked == 1"
+              @change="updateChecked(cart, $event)"
             />
           </li>
           <li class="cart-list-con2">
@@ -248,8 +249,7 @@ export default {
     //   } catch (error) {}
     // },
 
-
-// 修改某一个产品的个数（加入lodash节流）
+    // 修改某一个产品的个数（加入lodash节流）
     handler: throttle(async function (type, disNum, cart) {
       // type是为了区分这三个元素
       // 目前的disNum形参：+变化量（1）   -变化量(-1)   input最终的个数（并不是变化量）
@@ -300,6 +300,26 @@ export default {
         await this.$store.dispatch("reqDeleteCartListBySkuId", cart.skuId);
         this.getData();
       } catch (error) {
+        alert(error.message);
+      }
+    },
+
+    // 修改某个产品的勾选状态
+    async updateChecked(cart, event) {
+      // 带给服务器的参数isChecked不是布尔值，应该是0或者1
+      // console.log(event.target.checked);
+      // 而$event监听到的checked状态是以Boolean值来表示的，所以这里需要将Boolean值转化为0和1
+      try {
+        // 如果成功，再次获取服务器数据进行展示
+        let isChecked = event.target.checked ? "1" : "0";
+        await this.$store.dispatch("updateCheckedById", {
+          skuId: cart.skuId,
+          isChecked,
+        });
+
+        this.getData();
+      } catch (error) {
+        // 如果失败，提示
         alert(error.message);
       }
     },

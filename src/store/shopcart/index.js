@@ -1,5 +1,5 @@
 import {
-    reqCartList,reqDeleteCartById
+    reqCartList,reqDeleteCartById,reqUpdateCheckedById,
 } from '@/api'
 
 const state = {
@@ -34,6 +34,17 @@ const actions = {
       }else{
           return Promise.reject(new Error('fail'))
       }
+    },
+
+
+    // 修改商品选中的状态(带两个参数，要传一个对象)
+   async updateCheckedById({commit},{skuId,isChecked}){
+    let result=await    reqUpdateCheckedById(skuId,isChecked)
+    if(result.code==200){
+        return 'ok'
+    }else{
+        return Promise.reject(new Error('fail'))
+    }
     }
 };
 const getters = {

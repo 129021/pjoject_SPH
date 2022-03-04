@@ -114,7 +114,7 @@
             ><i>{{ orderInfo.totalNum }}</i
             >件商品，总商品金额</b
           >
-          <span>¥{{orderInfo.totalAmount}}.00</span>
+          <span>¥{{ orderInfo.totalAmount }}.00</span>
         </li>
         <li>
           <b>返现：</b>
@@ -127,7 +127,9 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥{{orderInfo.totalAmount}}.00</span></div>
+      <div class="price">
+        应付金额:　<span>¥{{ orderInfo.totalAmount }}.00</span>
+      </div>
       <div class="receiveInfo">
         寄送至:
         <span>{{ userDefaultAddress.fullAddress }} </span>
@@ -136,7 +138,8 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <!-- <router-link class="subBtn" to="/pay">提交订单</router-link> -->
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -144,12 +147,16 @@
 <script>
 import { mapState } from "vuex";
 
+import { reqSubmitOrder } from "@/api";
 export default {
   name: "Trade",
   data() {
     return {
       // 收集买家的留言信息
       msg: "",
+
+      // 订单号
+      orderId: "",
     };
   },
   computed: {
@@ -174,6 +181,35 @@ export default {
 
       // 点击的那个default为1（留下我自己）
       address.isDefault = 1;
+    },
+
+    // 提交订单
+    async submitOrder() {
+      // 需要带参数：tradNo
+      let { tradeNo } = this.orderInfo;
+      let data = {
+        consignee: this.userDefaultAddress.consignee,
+        consigneeTel: this.userDefaultAddress.phoneNum,
+        deliveryAddress: this.userDefaultAddress.fullAddress,
+        paymentWay: "ONLINE",
+        orderComment: this.msg,
+        orderDetailList: this.orderInfo.detailArrayList,
+      };
+
+      // console.log(this.$API);
+      let result = await this.$API.reqSubmitOrder(tradeNo, data);
+      console.log(result);
+      // 提交订单成功
+      if (result.code == 200) {
+        // 保存订单号
+        this.orderId = result.data;
+
+        // 路由跳转+路由传参
+        this.$router.push('/pay?orderId='+this.orderId)
+      } else {
+        // 提交订单失败
+        alert(result.data);
+      }
     },
   },
   mounted() {

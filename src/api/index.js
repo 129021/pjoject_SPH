@@ -3,6 +3,7 @@
 import requests from './request'
 
 import mockRequests from './mockAjax';
+// import { get } from 'core-js/core/dict';
 
 
 // 三级联动的接口
@@ -193,5 +194,52 @@ export const reqAddressInfo=()=>requests({
 // 请求方式：get
 export const reqOrderInfo=()=>requests({
     url:'/order/auth/trade',
+    method:'get',
+})
+
+
+
+
+// 提交订单的接口
+
+// URL:/api/order/auth/submitOrder?tradeNo={tradeNo}
+// 请求方式：post
+// 参数：全都必选
+// traderNo
+// consignee
+// consigneeTel
+// deliveryAddress
+// paymentWay
+// orderComment
+// orderDetailList
+
+
+export const reqSubmitOrder= (tradeNo,data)=>requests({
+    url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,
+    data,
+    method:'post',
+})
+
+
+
+// 获取订单支付信息
+// URL:/api/payment/weixin/createNative/{orderId}
+// 请求方式：get
+// 参数：orderId（必选）
+
+export const reqPayInfo=(orderId)=>requests({
+    url:`/payment/weixin/createNative/${orderId}`,
+    method:'get',
+
+})
+
+
+
+// 获取支付订单状态
+// URL:/api/payment/weixin/queryPayStatus/{orderId}
+// 请求方式：get
+// 参数：orderId（必选）
+export const reqPayStatus=(orderId)=>requests({
+    url:`/payment/weixin/queryPayStatus/${orderId}`,
     method:'get',
 })

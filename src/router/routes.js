@@ -1,4 +1,4 @@
-// 引入路由组件
+// 引入一级路由组件
 import Home from '@/pages/Home'
 import Search from '@/pages/Search'
 import Login from '@/pages/Login'
@@ -11,6 +11,14 @@ import Trade from '@/pages/Trade';
 import Pay from '@/pages/Pay';
 import PaySuccess from '@/pages/PaySuccess';
 import Center from '@/pages/Center';
+
+
+
+
+// 引入二级路由组件
+import myOrder from '@/pages/Center/myOrder';
+import groupOrder from '@/pages/Center/groupOrder';
+
 
 // 路由的具体配置信息
 export default [{
@@ -97,8 +105,31 @@ export default [{
         component: Center,
         meta: {
             show: true
-        }
+        },
+
+        // 二级路由组件
+        children: [{
+                // 这里的路径要么写全：
+                // path:'/center/myorder',
+                // 要么不写/
+                path: 'myorder',
+                component: myOrder,
+            },
+            {
+                path: 'grouporder',
+                component: groupOrder,
+            },
+
+            // 重定向
+            {
+                path:'/center',
+                redirect:'/center/myorder',
+            }
+        ],
     },
+
+
+
 
 
 

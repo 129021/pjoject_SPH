@@ -64,7 +64,7 @@ mounted() {
 
 
   // 获取用户信息在首页进行展示
-  this.$store.dispatch('getUserInfo')
+  // this.$store.dispatch('getUserInfo')
 
 },
 }

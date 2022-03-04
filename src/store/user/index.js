@@ -98,10 +98,9 @@ const actions = {
         if (result.code == 200) {
             // 用户已经登录成功且获取到token
             commit('GETUSERINFO', result.data);
-
-
-
-
+            return 'ok';
+        } else {
+            return Promise.reject(new Error('fail'))
         }
     },
 
@@ -116,7 +115,7 @@ const actions = {
         if (result.code == 200) {
             commit('CLEARALL');
             return 'ok';
-        }else{
+        } else {
             return Promise.reject(new Error('fail'))
         }
 

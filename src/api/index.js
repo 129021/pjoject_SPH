@@ -174,3 +174,24 @@ export const reqLogout=()=>requests({
 
     
 })
+
+
+
+
+// 获取用户地址信息
+// URL:/api/user/userAddress/auth/findUserAddressList
+// 请求方式：get
+export const reqAddressInfo=()=>requests({
+    url:'/user/userAddress/auth/findUserAddressList',
+    method:'get',
+})
+
+
+
+// 获取订单交易页信息
+// URL:/api/order/auth/trade
+// 请求方式：get
+export const reqOrderInfo=()=>requests({
+    url:'/order/auth/trade',
+    method:'get',
+})

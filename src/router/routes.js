@@ -7,6 +7,8 @@ import Detail from '@/pages/Detail'
 import AddCartSuccess from '@/pages/AddCartSuccess'
 
 import ShopCart from '@/pages/ShopCart'
+import Trade from '@/pages/Trade';
+import Pay from '@/pages/Pay';
 
 // 路由的具体配置信息
 export default [{
@@ -50,7 +52,7 @@ export default [{
 
         name: 'addcartsuccess',
 
-        name:'addcartsuccess',
+        name: 'addcartsuccess',
 
         component: AddCartSuccess,
         meta: {
@@ -66,6 +68,23 @@ export default [{
             show: true
         }
     },
+    {
+        path: '/trade',
+        // name: 'ShopCart',
+        component: Trade,
+        meta: {
+            show: true
+        }
+    },
+    {
+        path: '/pay',
+        component: Pay,
+        meta: {
+            show: true
+        }
+    },
+
+
 
 
     // 重定向，在项目跑起来的时候，当访问/的时候，立马让他定向到首页

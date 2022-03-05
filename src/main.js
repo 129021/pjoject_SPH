@@ -4,6 +4,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+// 引入懒加载插件
+import VueLazyload from 'vue-lazyload';
+// 注册懒加载插件
+
+// 引入加载图片
+import loading from '@/assets/images/loading.gif';
+Vue.use(VueLazyload,{
+  loading:loading,
+})
+
 import {
   Button,
   MessageBox
@@ -75,6 +85,17 @@ import * as API from '@/api'
 // console.log(API);
 
 Vue.config.productionTip = false
+
+
+
+
+// 引入自定义插件
+import myPlugins  from './plugins/myplugins';
+Vue.use(myPlugins);
+
+
+// 引入表单校验插件
+import '@/plugins/validate';
 
 new Vue({
   render: h => h(App),

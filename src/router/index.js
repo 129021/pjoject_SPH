@@ -130,7 +130,7 @@ router.beforeEach(async (to, from, next) => {
     if (token) {
         // 用户已经登录了，还想去login,不可以，要使其停留在首页
         // next(false);
-        if (to.path == '/login'||to.path=='/register') {
+        if (to.path == '/login' || to.path == '/register') {
             next('/home')
         } else {
             // 登录了，但是去的不是login或者register,放行
@@ -157,8 +157,22 @@ router.beforeEach(async (to, from, next) => {
             }
         }
     } else {
-        // 未登录,暂时没有处理完毕，先这个样子后期再处理
-        next();
+        // 未登录,不能去交易相关（trade）、支付先关（pay、paysuccess）、个人中心页面（center）
+
+        // 未登录的情况下去上面的这些路由，应该跳到登录页面
+        // 如果去的不是上面这些路由，放行
+
+        let toPath = to.path;
+        // console.log(toPath);
+        if (toPath.indexOf('/trade') != -1 || toPath.indexOf('/pay') != -1 || toPath.indexOf('/center') != -1) {
+
+            // 把未登录的时候想去而没有去成的信息，存储于地址栏中（以query的形式）
+            next('/login?redirect='+toPath)
+        } else {
+            next();
+        }
+
+        // next();
 
     }
 
